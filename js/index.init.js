@@ -7,7 +7,12 @@ import { createAdminUser } from "./services/setAdminUser.js";
 import { renderCartBody } from "./cart.init.js";
 import { cartBadgeHandler } from "./utils/cartBadgeHandler.js";
 
-let products ;
+const searchInput = document.getElementById("searchInput");
+const priceSelect = document.getElementById("priceSelect");
+const categorySelect = document.getElementById("categorySelect");
+const clearFilters = document.getElementById("clearFilters");
+
+let products;
 
 document.addEventListener("DOMContentLoaded", () => {
   Navbar();
@@ -18,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // cartBadgeHandler()
   renderProductCards(products);
 });
+
 
 const cardContainer = document.getElementById("cardContainer");
 
@@ -41,10 +47,8 @@ const renderProductCards = (products) => {
 
 
 
-const searchInput = document.getElementById("searchInput");
-const priceSelect = document.getElementById("priceSelect");
-const categorySelect = document.getElementById("categorySelect");
-const clearFilters = document.getElementById("clearFilters");
+
+
 /**
  * 
  * @param {string} value Valor del filtro de categoria 
@@ -71,13 +75,27 @@ const filterByCategory = (value, productsArray) => {
  * @returns {array} Devuelve el arreglo de productos filtrados
  */
 
-const filterByPrice = (value, productsArray) => {
-  let comparar = function (a, b) {
-    return a - b;
-  };
-  productsArray.price.sort(comparar);
 
-  productsArray.price.sort((a,b) => a.price - b.price)
+
+const filterByPrice = (value,productsArray) => {
+  
+  productsArray = getProducts()
+
+  switch (value){
+  case 'asc' :
+    productsArray.sort(productsArray.price)
+    
+    break;
+  case 'desc':
+    console.log("es desc")
+  break;
+  case 'disc':
+    console.log("es disc")
+    break;
+  default :
+  console.log("no hay nada que filtrar")
+ }
+
 
 };
 
@@ -87,20 +105,18 @@ const filterByPrice = (value, productsArray) => {
  * @returns Arreglo de productos a renderizar
  */
 
-const searchByName = (value) => {
-  let p = JSON.parse(localStorage.getItem('products'))
-  let pFiltered = []
-  console.log(p);
+const searchByName = () => {
+  products = getProducts()
+   let nombreProducto = searchInput.value.toLowerCase().trim();
+   products.forEach( p =>{
+    let nombreMinuscula = p.name.toLowerCase()
+    if(nombreMinuscula.includes(nombreProducto) && nombreProducto.length >0){
+      console.log(`el producto que estas buscando si existe y es ${nombreMinuscula}`)
+    }
+  } )
+  
   //https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/String/includes
-p.forEach(producto => {
-  if (producto.name == v)lue
-= pFilteredetlifpp 
-});
-
-//https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/String/includes
-  console.log(pFiltered);
 };
-
 searchInput.addEventListener('keyup', searchByName)
 
 /**
@@ -113,12 +129,11 @@ searchInput.addEventListener('keyup', searchByName)
 
 const renderFilteredProducts = (searchInputValue,priceSelectValue,categorySelectValue) => {
   let filteredProducts = searchByName(searchInputValue)
-  filteredProducts = filterByCategory(categorySelectValue,filteredProducts)
   filteredProducts = filterByPrice(priceSelectValue,filteredProducts)
- 
+  filteredProducts = filterByCategory(categorySelectValue,filteredProducts)
   renderProductCards(filteredProducts);
 
-  // ProductNotFoundMessage()
+  ProductNotFoundMessage()
 };
 
 searchInput.addEventListener("keyup", (e) => {
