@@ -87,59 +87,42 @@ const filterByCategory = (value, productsArray) => {
 
 const filterByPrice = (value,productsArray) => {
   productsArray=getProducts()
-  let matchingProducts;
-  if (value == "asc") {
-    matchingProducts = productsArray.sort((a, b) => a.price - b.price);
-  }
-  if (value == "desc") {
-    matchingProducts = productsArray.sort((a, b) => b.price - a.price);
-  }
-  if (value == "disc") {
-    matchingProducts = productsArray.filter((product) => product.discountPercentage);
-    matchingProducts = matchingProducts.sort((a, b) => b.discountPercentage - a.discountPercentage);
-  }
-  if (value) {
-    return matchingProducts;
-  }
-  return productsArray;
+  // let matchingProducts;
+  // if (value == "asc") {
+  //   matchingProducts = productsArray.sort((a, b) => a.price - b.price);
+  // }
+  // if (value == "desc") {
+  //   matchingProducts = productsArray.sort((a, b) => b.price - a.price);
+  // }
+  // if (value == "disc") {
+  //   matchingProducts = productsArray.filter((product) => product.discountPercentage);
+  //   matchingProducts = matchingProducts.sort((a, b) => b.discountPercentage - a.discountPercentage);
+  // }
+  // if (value) {
+  //   return matchingProducts;
+  // }
+  // return productsArray;
 
-//   switch (value){
-//   case 'asc' :
-//     productsArray = getProducts();
-//       function compararYListarProductosPorPreciosAsc(productsArray) {
-//         let matchingProducts = productsArray.sort((a, b) => {
-//           return a.price - b.price;
-//         });
-//         return matchingProducts;  
-//       }
-      
-//       compararYListarProductosPorPreciosAsc(productsArray)
-
-//     break;
-//   case 'desc':
-//     productsArray = getProducts();
-//       function compararYListarProductosPorPreciosDesc(productsArray) {
-//         let matchingProducts = productsArray.sort((a, b) => {
-//           return b.price - a.price;
-//         });
-//         return matchingProducts; 
-//       }
-//       console.log(compararYListarProductosPorPreciosDesc(productsArray));
-//   break;
-//   case 'disc':
-//     productsArray = getProducts();
-//     let productsArrayDisc=productsArray.filter(products=>{
-//       return products.discountPercentage != false
-      
-//     })
-//     console.log(productsArrayDisc)
-
-//     break;
-//   default :
-//   console.log("no hay nada que filtrar")
-// }
-
-
+  switch (value){
+  case 'asc' :
+        let matchingProductsAsc = productsArray.sort((a, b) => {
+          return a.price - b.price;
+        });
+        return matchingProductsAsc;  
+  case 'desc':
+        let matchingProductsDesc = productsArray.sort((a, b) => {
+          return b.price - a.price;
+        });
+        return matchingProductsDesc; 
+  case 'disc':
+    let productsArrayDisc=productsArray.filter(products=>{
+      return products.discountPercentage != false     
+    });
+    return productsArrayDisc
+  default :
+  console.log("no hay nada que filtrar")
+}
+return productsArray
 };
 
 /**
