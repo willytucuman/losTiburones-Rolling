@@ -106,18 +106,16 @@ const filterByPrice = (value,productsArray) => {
   switch (value){
   case 'asc' :
         let matchingProductsAsc = productsArray.sort((a, b) => {
-          return a.price - b.price;
+          return (a.price-(a.price*(a.discountPercentage*0.01))) - (b.price-(b.price*(b.discountPercentage*0.01)));
         });
         return matchingProductsAsc;  
   case 'desc':
         let matchingProductsDesc = productsArray.sort((a, b) => {
-          return b.price - a.price;
+          return (b.price-(b.price*(b.discountPercentage*0.01))) - (a.price-(a.price*(a.discountPercentage*0.01)));
         });
         return matchingProductsDesc; 
   case 'disc':
-    let productsArrayDisc=productsArray.filter(products=>{
-      return products.discountPercentage != false     
-    });
+    let productsArrayDisc=(productsArray.filter(products => products.discountPercentage != false)).sort((a, b) => a.discountPercentage - b.discountPercentage);
     return productsArrayDisc
   default :
   console.log("no hay nada que filtrar")
