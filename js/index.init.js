@@ -61,7 +61,10 @@ const renderProductCards = (products) => {
 
 
 const filterByCategory = (value, productsArray) => {
-  let matchingProducts = productsArray.filter((product) => product.category == value);
+  console.log(value)
+  console.log(productsArray)
+  const matchingProducts = productsArray.filter((product) => product.category == value);
+  console.log(matchingProducts)
   if (value) {
     return matchingProducts;
   }
@@ -85,8 +88,10 @@ const filterByCategory = (value, productsArray) => {
 
 
 
-const filterByPrice = (value,productsArray) => {
-  productsArray=getProducts()
+const filterByPrice = (value, productsArray) => {
+  let productsOrdered = [];
+  console.log(value)
+  console.log(productsArray)
   // let matchingProducts;
   // if (value == "asc") {
   //   matchingProducts = productsArray.sort((a, b) => a.price - b.price);
@@ -102,25 +107,34 @@ const filterByPrice = (value,productsArray) => {
   //   return matchingProducts;
   // }
   // return productsArray;
-
-  switch (value){
-  case 'asc' :
-        let matchingProductsAsc = productsArray.sort((a, b) => {
-          return (a.price-(a.price*(a.discountPercentage*0.01))) - (b.price-(b.price*(b.discountPercentage*0.01)));
-        });
-        return matchingProductsAsc;  
-  case 'desc':
-        let matchingProductsDesc = productsArray.sort((a, b) => {
-          return (b.price-(b.price*(b.discountPercentage*0.01))) - (a.price-(a.price*(a.discountPercentage*0.01)));
-        });
-        return matchingProductsDesc; 
-  case 'disc':
-    let productsArrayDisc=(productsArray.filter(products => products.discountPercentage != false)).sort((a, b) => a.discountPercentage - b.discountPercentage);
-    return productsArrayDisc
-  default :
-  console.log("no hay nada que filtrar")
+  if (value == "") {
+    productsOrdered = productsArray
+    console.log(productsOrdered)
+  } else {
+    switch (value){
+    case 'asc' :
+          let matchingProductsAsc = productsArray.sort((a, b) => {
+            return (a.price-(a.price*(a.discountPercentage*0.01))) - (b.price-(b.price*(b.discountPercentage*0.01)));
+          });
+          console.log(matchingProductsAsc)
+          return productsOrdered = matchingProductsAsc;  
+    case 'desc':
+          let matchingProductsDesc = productsArray.sort((a, b) => {
+            return (b.price-(b.price*(b.discountPercentage*0.01))) - (a.price-(a.price*(a.discountPercentage*0.01)));
+          });
+          console.log(matchingProductsDesc)
+          return productsOrdered = matchingProductsDesc;  
+    case 'disc':
+      let productsArrayDisc = (productsArray.filter(products => products.discountPercentage != false)).sort((a, b) => a.discountPercentage - b.discountPercentage);
+      console.log(productsArrayDisc)
+      return productsOrdered = productsArrayDisc;  
+    default :
+    productsOrdered = ProductNotFoundMessage();
+    console.log("no hay nada que filtrar");
+  }
 }
-return productsArray
+console.log(productsOrdered)
+return productsOrdered;
 };
 
 /**
@@ -129,19 +143,26 @@ return productsArray
  * @returns Arreglo de productos a renderizar
  */
 
-const searchByName = () => {
+const searchByName = (inputWord) => {
   products = getProducts()
-   let nombreProducto = searchInput.value.toLowerCase().trim();
-   products.forEach( p =>{
-    let nombreMinuscula = p.name.toLowerCase()
-    if(nombreMinuscula.includes(nombreProducto) && nombreProducto.length >0){
-      console.log(`el producto que estas buscando si existe y es ${nombreMinuscula}`)
-    }
-  } )
+  let searchedProducts = [];
+  const nombreProducto = (inputWord).toString().toLowerCase().trim();
+   if (inputWord == "") {
+    searchedProducts = products;
+   } else {
+     products.forEach( p =>{
+      const nombreMinuscula = p.name.toLowerCase()
+      if(nombreMinuscula.includes(nombreProducto) && nombreProducto.length > 0){
+        searchedProducts.push(p)
+      }
+    })
+   }
+  console.log(searchedProducts)
+  return searchedProducts
   
   //https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/String/includes
 };
-searchInput.addEventListener('keyup', searchByName)
+// searchInput.addEventListener('keyup', searchByName)
 
 /**
  * 
@@ -153,8 +174,11 @@ searchInput.addEventListener('keyup', searchByName)
 
 const renderFilteredProducts = (searchInputValue,priceSelectValue,categorySelectValue) => {
   let filteredProducts = searchByName(searchInputValue)
-  filteredProducts = filterByPrice(priceSelectValue,filteredProducts)
-  filteredProducts = filterByCategory(categorySelectValue,filteredProducts)
+  console.log(filteredProducts)
+  filteredProducts = filterByPrice(priceSelectValue, filteredProducts)
+  console.log(filteredProducts)
+  filteredProducts = filterByCategory(categorySelectValue, filteredProducts)
+  console.log(filteredProducts)
   renderProductCards(filteredProducts);
 
   ProductNotFoundMessage()
